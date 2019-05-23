@@ -1,5 +1,6 @@
 [![GoDoc](http://godoc.org/github.com/dongfg/gocronexpr?status.png)](http://godoc.org/github.com/dongfg/gocronexpr) 
 [![Build Status](https://travis-ci.org/dongfg/gocronexpr.svg?branch=master)](https://travis-ci.org/dongfg/gocronexpr)
+[![Go Report Card](https://goreportcard.com/badge/github.com/dongfg/gocronexpr)](https://goreportcard.com/report/github.com/dongfg/gocronexpr)
 Cron expression parsing in go
 =================================
 ### Introduction
