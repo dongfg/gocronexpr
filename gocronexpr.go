@@ -1,7 +1,6 @@
 package gocronexpr
 
 import (
-	"errors"
 	"fmt"
 	"github.com/willf/bitset"
 	"strconv"
@@ -130,7 +129,7 @@ func (c *CronExpr) doNext(cal *calendar, dot int) error {
 	updateMonth := c.findNext(c.months, month, cal, constMonth, constYear, resets)
 	if month != updateMonth {
 		if cal.year-dot > 4 {
-			return errors.New(fmt.Sprintf("Invalid cron expression \"%s\" led to runaway search for next trigger", c.expression))
+			return fmt.Errorf("invalid cron expression \"%s\" led to runaway search for next trigger", c.expression)
 		}
 		if err := c.doNext(cal, dot); err != nil {
 			return err
@@ -153,7 +152,7 @@ func (c *CronExpr) findNextDay(cal *calendar, daysOfMonth *bitset.BitSet, dayOfM
 		count++
 	}
 	if count >= max {
-		return dayOfMonth, errors.New(fmt.Sprintf("Overflow in day for expression %s", c.expression))
+		return dayOfMonth, fmt.Errorf("overflow in day for expression %s", c.expression)
 	}
 	return dayOfMonth, nil
 }
@@ -176,7 +175,7 @@ func (c *CronExpr) findNext(bits *bitset.BitSet, value int, cal *calendar, field
 func (c *CronExpr) parse() error {
 	fields := strings.Fields(c.expression)
 	if len(fields) != 6 {
-		return errors.New(fmt.Sprintf("cron expression must consist of 6 fields (found %d in \"%s\")", len(fields), c.expression))
+		return fmt.Errorf("cron expression must consist of 6 fields (found %d in \"%s\")", len(fields), c.expression)
 	}
 
 	if err := c.setNumberHits(c.seconds, fields[0], 0, 60); err != nil {
@@ -259,7 +258,7 @@ func (c *CronExpr) setNumberHits(bits *bitset.BitSet, value string, min int, max
 		} else {
 			split := strings.Split(field, "/")
 			if len(split) > 2 {
-				return errors.New(fmt.Sprintf("incrementer has more than two fields: '%s' in expression \"%s\"", field, c.expression))
+				return fmt.Errorf("incrementer has more than two fields: '%s' in expression \"%s\"", field, c.expression)
 			}
 			r, err := c.getRange(split[0], min, max)
 			if err != nil {
@@ -273,7 +272,7 @@ func (c *CronExpr) setNumberHits(bits *bitset.BitSet, value string, min int, max
 				return err
 			}
 			if delta <= 0 {
-				return errors.New(fmt.Sprintf("incrementer delta must be 1 or higher: '%s' in expression \"%s\"", field, c.expression))
+				return fmt.Errorf("incrementer delta must be 1 or higher: '%s' in expression \"%s\"", field, c.expression)
 			}
 			for i := r[0]; i <= r[1]; i += delta {
 				bits.Set(uint(i))
@@ -299,7 +298,7 @@ func (c *CronExpr) getRange(field string, min int, max int) ([]int, error) {
 	} else {
 		split := strings.Split(field, "-")
 		if len(split) > 2 {
-			return result, errors.New(fmt.Sprintf("range has more than two fields: '%s' in expression \"%s\"", field, c.expression))
+			return result, fmt.Errorf("range has more than two fields: '%s' in expression \"%s\"", field, c.expression)
 		}
 		n1, err := strconv.Atoi(split[0])
 		if err != nil {
@@ -312,13 +311,13 @@ func (c *CronExpr) getRange(field string, min int, max int) ([]int, error) {
 		result[0], result[1] = n1, n2
 	}
 	if result[0] >= max || result[1] >= max {
-		return result, errors.New(fmt.Sprintf("range exceeds maximum (%d): '%s' in expression \"%s\"", max, field, c.expression))
+		return result, fmt.Errorf("range exceeds maximum (%d): '%s' in expression \"%s\"", max, field, c.expression)
 	}
 	if result[0] < min || result[1] < min {
-		return result, errors.New(fmt.Sprintf("range less than minimum (%d): '%s' in expression \"%s\"", max, field, c.expression))
+		return result, fmt.Errorf("range less than minimum (%d): '%s' in expression \"%s\"", max, field, c.expression)
 	}
 	if result[0] > result[1] {
-		return result, errors.New(fmt.Sprintf("invalid inverted range (%d): '%s' in expression \"%s\"", max, field, c.expression))
+		return result, fmt.Errorf("invalid inverted range (%d): '%s' in expression \"%s\"", max, field, c.expression)
 	}
 	return result, nil
 }
