@@ -9,6 +9,7 @@ import (
 	"time"
 )
 
+// CronExpr is parse result with no exported fields
 type CronExpr struct {
 	expression string
 	location   *time.Location
