@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-type cronexpr struct {
+type CronExpr struct {
 	expression string
 	location   *time.Location
 
@@ -45,8 +45,8 @@ const (
 )
 
 // New cron expr, return error if parse fail
-func New(expression string, location *time.Location) (*cronexpr, error) {
-	c := &cronexpr{
+func New(expression string, location *time.Location) (*CronExpr, error) {
+	c := &CronExpr{
 		expression: expression,
 		location:   location,
 
@@ -65,7 +65,7 @@ func New(expression string, location *time.Location) (*cronexpr, error) {
 }
 
 // Next time calculated based on the given time.
-func (c *cronexpr) Next(t time.Time) (time.Time, error) {
+func (c *CronExpr) Next(t time.Time) (time.Time, error) {
 	cal := newCalendar(t, c.location)
 	originalTimestamp := cal.time.Unix()
 	if err := c.doNext(cal, cal.year); err != nil {
@@ -81,7 +81,7 @@ func (c *cronexpr) Next(t time.Time) (time.Time, error) {
 	return cal.time, nil
 }
 
-func (c *cronexpr) doNext(cal *calendar, dot int) error {
+func (c *CronExpr) doNext(cal *calendar, dot int) error {
 	var resets []int
 
 	second := cal.sec
@@ -139,7 +139,7 @@ func (c *cronexpr) doNext(cal *calendar, dot int) error {
 	return nil
 }
 
-func (c *cronexpr) findNextDay(cal *calendar, daysOfMonth *bitset.BitSet, dayOfMonth int, daysOfWeek *bitset.BitSet, dayOfWeek int, resets []int) (int, error) {
+func (c *CronExpr) findNextDay(cal *calendar, daysOfMonth *bitset.BitSet, dayOfMonth int, daysOfWeek *bitset.BitSet, dayOfWeek int, resets []int) (int, error) {
 	count := 0
 	max := 366
 	// the DAY_OF_WEEK values in java.util.Calendar start with 1 (Sunday),
@@ -157,7 +157,7 @@ func (c *cronexpr) findNextDay(cal *calendar, daysOfMonth *bitset.BitSet, dayOfM
 	return dayOfMonth, nil
 }
 
-func (c *cronexpr) findNext(bits *bitset.BitSet, value int, cal *calendar, field int, nextField int, lowerOrders []int) int {
+func (c *CronExpr) findNext(bits *bitset.BitSet, value int, cal *calendar, field int, nextField int, lowerOrders []int) int {
 	nextValue, has := bits.NextSet(uint(value))
 	if !has {
 		cal.add(nextField, 1)
@@ -172,7 +172,7 @@ func (c *cronexpr) findNext(bits *bitset.BitSet, value int, cal *calendar, field
 	return int(nextValue)
 }
 
-func (c *cronexpr) parse() error {
+func (c *CronExpr) parse() error {
 	fields := strings.Fields(c.expression)
 	if len(fields) != 6 {
 		return errors.New(fmt.Sprintf("cron expression must consist of 6 fields (found %d in \"%s\")", len(fields), c.expression))
@@ -215,7 +215,7 @@ func replaceOrdinals(value string, commaSeparatedList string) string {
 	return value
 }
 
-func (c *cronexpr) setDaysOfMonth(bits *bitset.BitSet, field string) error {
+func (c *CronExpr) setDaysOfMonth(bits *bitset.BitSet, field string) error {
 	max := 31
 	if err := c.setDays(bits, field, max+1); err != nil {
 		return err
@@ -224,14 +224,14 @@ func (c *cronexpr) setDaysOfMonth(bits *bitset.BitSet, field string) error {
 	return nil
 }
 
-func (c *cronexpr) setDays(bits *bitset.BitSet, field string, max int) error {
+func (c *CronExpr) setDays(bits *bitset.BitSet, field string, max int) error {
 	if strings.Contains(field, "?") {
 		field = "*"
 	}
 	return c.setNumberHits(bits, field, 0, max)
 }
 
-func (c *cronexpr) setMonths(bits *bitset.BitSet, value string) error {
+func (c *CronExpr) setMonths(bits *bitset.BitSet, value string) error {
 	max := 12
 	value = replaceOrdinals(value, "FOO,JAN,FEB,MAR,APR,MAY,JUN,JUL,AUG,SEP,OCT,NOV,DEC")
 	months := bitset.New(13)
@@ -246,7 +246,7 @@ func (c *cronexpr) setMonths(bits *bitset.BitSet, value string) error {
 	return nil
 }
 
-func (c *cronexpr) setNumberHits(bits *bitset.BitSet, value string, min int, max int) error {
+func (c *CronExpr) setNumberHits(bits *bitset.BitSet, value string, min int, max int) error {
 	fields := strings.Split(value, ",")
 	for _, field := range fields {
 		if !strings.Contains(field, "/") {
@@ -282,7 +282,7 @@ func (c *cronexpr) setNumberHits(bits *bitset.BitSet, value string, min int, max
 	return nil
 }
 
-func (c *cronexpr) getRange(field string, min int, max int) ([]int, error) {
+func (c *CronExpr) getRange(field string, min int, max int) ([]int, error) {
 	var result = make([]int, 2)
 	if strings.Contains(field, "*") {
 		result[0] = min
