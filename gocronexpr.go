@@ -7,10 +7,9 @@ import (
 	"unsafe"
 )
 
-// #cgo CFLAGS: -I./ccronexpr
-// #cgo LDFLAGS: -L./ccronexpr -lccronexpr
+// #cgo CFLAGS: -I./libs/ccronexpr
+// #cgo LDFLAGS: -L./libs -lccronexpr
 // #include <stdlib.h>
-// #include <time.h>
 // #include "ccronexpr.h"
 import "C"
 
