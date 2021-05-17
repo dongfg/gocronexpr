@@ -179,17 +179,17 @@ func Test_cronexpr_Next(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			c, err := New(tt.expression, time.Local)
 			if err != nil {
-				t.Errorf("cronexpr.New() error = %v, expression %v", err, tt.expression)
+				t.Errorf("CronExpr.New() error = %v, expression %v", err, tt.expression)
 				return
 			}
 			base, _ := time.Parse("2006-01-02 15:04:05", tt.baseTime)
 			got, err := c.Next(base)
 			if err != nil {
-				t.Errorf("cronexpr.Next() error = %v, expression %v", err, tt.expression)
+				t.Errorf("CronExpr.Next() error = %v, expression %v", err, tt.expression)
 				return
 			}
 			if !reflect.DeepEqual(got.Format("2006-01-02 15:04:05"), tt.want) {
-				t.Errorf("cronexpr.Next() = %v, want %v", got.Format("2006-01-02 15:04:05"), tt.want)
+				t.Errorf("CronExpr.Next() = %v, want %v", got.Format("2006-01-02 15:04:05"), tt.want)
 			}
 		})
 	}
