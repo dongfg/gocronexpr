@@ -28,7 +28,7 @@ import (
 )
 
 func main()  {
-	cronExpr, err := gocronexpr.New("* * * * * *", time.Local)
+    cronExpr, err := gocronexpr.New("* * * * * *", time.Local)
     if err != nil {
         fmt.Println(err)
         return
