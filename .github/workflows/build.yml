@@ -1,18 +1,22 @@
-name: Go Test
-on: [push, pull_request]
+name: Github Release
+on:
+  push:
+    tags:
+      - 'v*.*.*'
 jobs:
-  test:
-    strategy:
-      matrix:
-        go-version: [1.13.x, 1.14.x]
-        platform: [ubuntu-latest, macos-latest, windows-latest]
-    runs-on: ${{ matrix.platform }}
+  goreleaser:
+    runs-on: ubuntu-latest
     steps:
-      - name: Install Go
-        uses: actions/setup-go@v2
-        with:
-          go-version: ${{ matrix.go-version }}
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+      - uses: actions/checkout@v2
+
       - name: Test
-        run: go test ./...
+        run: go test .
+
+      - name: GoReleaser
+        uses: goreleaser/goreleaser-action@v2
+        with:
+          version: latest
+          args: release --rm-dist --skip-validate
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
