@@ -145,7 +145,7 @@ func (c *CronExpr) findNextDay(cal *calendar, daysOfMonth *bitset.BitSet, dayOfM
 	max := 366
 	// the DAY_OF_WEEK values in java.util.Calendar start with 1 (Sunday),
 	// but in the cron pattern, they start with 0, so we subtract 1 here
-	for ((!daysOfMonth.Test(uint(dayOfMonth))) || !daysOfWeek.Test(uint(dayOfWeek - 1))) && (count < max) {
+	for ((!daysOfMonth.Test(uint(dayOfMonth))) || !daysOfWeek.Test(uint(dayOfWeek-1))) && (count < max) {
 		cal.add(constDayOfMonth, 1)
 		dayOfMonth = cal.day
 		dayOfWeek = cal.getDayOfWeek()
