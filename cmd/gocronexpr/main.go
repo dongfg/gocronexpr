@@ -13,9 +13,9 @@ type color string
 
 const (
 	colorRed    color = "\u001b[31m"
-	colorGreen        = "\u001b[32m"
-	colorYellow       = "\u001b[33m"
-	colorReset        = "\u001b[0m"
+	colorGreen  color = "\u001b[32m"
+	colorYellow color = "\u001b[33m"
+	colorReset  color = "\u001b[0m"
 )
 
 func init() {
