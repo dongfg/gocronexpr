@@ -101,6 +101,26 @@ func (c *CronExpr) Next(t *time.Time) (time.Time, error) {
 	return cal.time, nil
 }
 
+// Run function periodically by cron expr
+// todo: start time
+// todo: put options in struct
+func (c *CronExpr) Run(fn func(), end *time.Time) {
+	base := time.Now()
+	for {
+		next, err := c.Next(&base)
+		if err != nil {
+			fmt.Println("error get next run time", err)
+			return
+		}
+		if end != nil && next.After(*end) {
+			return
+		}
+		<-time.After(next.Sub(base))
+		fn()
+		base = next
+	}
+}
+
 func (c *CronExpr) doNext(cal *calendar, dot int) error {
 	var resets []int
 
