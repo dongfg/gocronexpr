@@ -9,6 +9,12 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- add `executed` hook
+
+## [1.1.2] - 2021-07-25
+
+### Added
+
 - add `finish` hook
 
 ## [1.1.1] - 2021-07-24
@@ -75,22 +81,10 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - cron expression parse && next time calculate complete
 
+[1.1.3]: https://github.com/dongfg/gocronexpr/releases/tag/v1.1.3
+
 [1.1.2]: https://github.com/dongfg/gocronexpr/releases/tag/v1.1.2
 
 [1.1.1]: https://github.com/dongfg/gocronexpr/releases/tag/v1.1.1
 
 [1.1.0]: https://github.com/dongfg/gocronexpr/releases/tag/v1.1.0
-
-[1.0.3]: https://github.com/dongfg/gocronexpr/releases/tag/v1.0.3
-
-[1.0.2]: https://github.com/dongfg/gocronexpr/releases/tag/v1.0.2
-
-[1.0.1]: https://github.com/dongfg/gocronexpr/releases/tag/v1.0.1
-
-[1.0.0]: https://github.com/dongfg/gocronexpr/releases/tag/v1.0.0
-
-[0.1.1]: https://github.com/dongfg/gocronexpr/releases/tag/v0.1.2
-
-[0.1.1]: https://github.com/dongfg/gocronexpr/releases/tag/v0.1.1
-
-[0.1.0]: https://github.com/dongfg/gocronexpr/releases/tag/v0.1.0
