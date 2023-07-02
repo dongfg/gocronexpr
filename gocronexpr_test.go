@@ -183,7 +183,7 @@ func Test_cronexpr_Next(t *testing.T) {
 				return
 			}
 			base, _ := time.Parse("2006-01-02 15:04:05", tt.baseTime)
-			got, err := c.Next(base)
+			got, err := c.Next(&base)
 			if err != nil {
 				t.Errorf("CronExpr.Next() error = %v, expression %v", err, tt.expression)
 				return
