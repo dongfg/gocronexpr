@@ -65,7 +65,7 @@ func main() {
 
 	base := time.Now()
 	for i := 0; i < times; i++ {
-		nextTime, err := cronExpr.Next(base)
+		nextTime, err := cronExpr.Next(&base)
 		if err != nil {
 			colorize(colorRed, err.Error())
 			return
