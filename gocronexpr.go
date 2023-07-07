@@ -37,8 +37,9 @@ type CronExpr struct {
 
 // ScheduleOptions by cron expr
 type ScheduleOptions struct {
-	Start *time.Time
-	End   *time.Time
+	Start  *time.Time
+	End    *time.Time
+	Finish func()
 }
 
 type calendar struct {
@@ -119,7 +120,7 @@ func (c *CronExpr) Run(fn func(), options *ScheduleOptions) {
 
 		// stop after end time
 		if options.End != nil && next.After(*options.End) {
-			return
+			break
 		}
 		// start after start time
 		if options.Start != nil && next.After(*options.Start) {
@@ -128,6 +129,9 @@ func (c *CronExpr) Run(fn func(), options *ScheduleOptions) {
 		<-time.After(next.Sub(base))
 		fn()
 		base = next
+	}
+	if options.Finish != nil {
+		options.Finish()
 	}
 }
 
