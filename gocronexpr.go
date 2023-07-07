@@ -35,6 +35,12 @@ type CronExpr struct {
 	seconds     *bitset.BitSet
 }
 
+// ScheduleOptions by cron expr
+type ScheduleOptions struct {
+	Start *time.Time
+	End   *time.Time
+}
+
 type calendar struct {
 	year  int
 	month int
@@ -102,9 +108,7 @@ func (c *CronExpr) Next(t *time.Time) (time.Time, error) {
 }
 
 // Run function periodically by cron expr
-// todo: start time
-// todo: put options in struct
-func (c *CronExpr) Run(fn func(), end *time.Time) {
+func (c *CronExpr) Run(fn func(), options *ScheduleOptions) {
 	base := time.Now()
 	for {
 		next, err := c.Next(&base)
@@ -112,8 +116,14 @@ func (c *CronExpr) Run(fn func(), end *time.Time) {
 			fmt.Println("error get next run time", err)
 			return
 		}
-		if end != nil && next.After(*end) {
+
+		// stop after end time
+		if options.End != nil && next.After(*options.End) {
 			return
+		}
+		// start after start time
+		if options.Start != nil && next.After(*options.Start) {
+			next = *options.Start
 		}
 		<-time.After(next.Sub(base))
 		fn()
