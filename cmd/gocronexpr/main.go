@@ -48,7 +48,7 @@ func parse() (cron string, times int, err error) {
 }
 
 func main() {
-	if len(os.Args) == 2 && len(os.Args) == 3 {
+	if len(os.Args) != 2 && len(os.Args) != 3 {
 		flag.Usage()
 	}
 	cron, times, err := parse()
