@@ -79,8 +79,14 @@ func New(expression string, location *time.Location) (*CronExpr, error) {
 }
 
 // Next time calculated based on the given time.
-func (c *CronExpr) Next(t time.Time) (time.Time, error) {
-	cal := newCalendar(t, c.location)
+func (c *CronExpr) Next(t *time.Time) (time.Time, error) {
+	var base time.Time
+	if t == nil {
+		base = time.Now()
+	} else {
+		base = *t
+	}
+	cal := newCalendar(base, c.location)
 	originalTimestamp := cal.time.Unix()
 	if err := c.doNext(cal, cal.year); err != nil {
 		return time.Time{}, err
