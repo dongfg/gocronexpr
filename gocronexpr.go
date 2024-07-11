@@ -16,7 +16,7 @@ package gocronexpr
 
 import (
 	"fmt"
-	"github.com/willf/bitset"
+	"github.com/bits-and-blooms/bitset"
 	"strconv"
 	"strings"
 	"time"
